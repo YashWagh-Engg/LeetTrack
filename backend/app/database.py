@@ -5,6 +5,15 @@ import os
 
 from app.models.base import Base
 
+from sqlalchemy.orm import Session
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
