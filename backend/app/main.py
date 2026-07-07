@@ -7,9 +7,15 @@ from fastapi import FastAPI
 Base.metadata.create_all(bind=engine)
 from app.routers.auth import router as auth_router
 
+from app.dependencies.auth import get_current_user
+from fastapi import Depends
 
 app = FastAPI()
 app.include_router(auth_router)
+
+@app.get("/profile")
+def profile(current_user=Depends(get_current_user)):
+    return current_user
 
 @app.get("/")
 def home():
