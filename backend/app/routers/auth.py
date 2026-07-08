@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException
-from streamlit import user
 from app.schemas.user import UserCreate
 from sqlalchemy.orm import Session
 
