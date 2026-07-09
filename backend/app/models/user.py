@@ -1,7 +1,7 @@
 from sqlalchemy import String, Integer, DateTime
 from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime
-
+from sqlalchemy.orm import relationship
 from app.models.base import Base
 
 class User(Base):
@@ -15,7 +15,12 @@ class User(Base):
         String(100),
         unique=True,
         nullable=False
-    )
+)
+    goals = relationship(
+    "Goal",
+    back_populates="user"
+)
+    
 
     hashed_password: Mapped[str] = mapped_column(String)
 
