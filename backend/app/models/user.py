@@ -28,3 +28,7 @@ class User(Base):
         DateTime,
         default=datetime.utcnow
     )
+    problems = relationship(
+    "Problem",
+    back_populates="user"
+)
