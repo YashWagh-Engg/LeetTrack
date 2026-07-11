@@ -11,12 +11,14 @@ from app.dependencies.auth import get_current_user
 from fastapi import Depends
 
 from app.routers.goal import router as goal_router
-
+from app.routers.dashboard import router as dashboard_router
 from app.routers.problem import router as problem_router
+
 app = FastAPI()
 app.include_router(auth_router)
 app.include_router(goal_router)
 app.include_router(problem_router)
+app.include_router(dashboard_router)
 
 @app.get("/profile")
 def profile(current_user=Depends(get_current_user)):
