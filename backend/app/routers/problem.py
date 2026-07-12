@@ -4,7 +4,8 @@ from fastapi import HTTPException
 from app.database import get_db
 from app.models.problem import Problem
 from app.schemas.problem import ProblemCreate, ProblemResponse
-from datetime import timedelta
+from datetime import date, timedelta
+from datetime import dates, timedelta
 
 router = APIRouter(
     prefix="/problem",
@@ -118,6 +119,14 @@ def get_streak(user_id: int,db: Session = Depends(get_db)):
 
     
     current_streak = 0
+
+    today = date.today()
+
+    if not dates:
+       return {"current_streak": 0}
+
+    if dates[0] != today:
+       return {"current_streak": 0}
     
     if unique_dates:
         current_streak = 1

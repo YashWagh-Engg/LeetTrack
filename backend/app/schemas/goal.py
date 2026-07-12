@@ -4,7 +4,6 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 
 class GoalCreate(BaseModel):
-    user_id: int
     daily_goal: int = Field(
         ge=1,
         le=20

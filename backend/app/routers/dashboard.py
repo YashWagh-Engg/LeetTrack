@@ -42,8 +42,23 @@ def dashboard(user_id: int, db: Session = Depends(get_db)):
     Problem.user_id == user_id
 ).scalar()
     
+    solved_today = db.query(Problem).filter(
+        Problem.user_id == user_id,
+        func.date(Problem.solved_at) == func.current_date()
+).count()
+    
+    remaining_goal = 0
+
+    if goal:
+      remaining_goal = max(goal.daily_goal - solved_today, 0)
+    
     return {
+
     "daily_goal": goal.daily_goal if goal else 0,
+
+    "solved_today": solved_today,
+
+    "remaining_goal": remaining_goal,
 
     "total_problems": total,
 
@@ -53,6 +68,7 @@ def dashboard(user_id: int, db: Session = Depends(get_db)):
 
     "hard": hard,
 
-    "average_time": round(average, 2) if average else 0
+    "average_time": round(average,2) if average else 0
 }
+
     

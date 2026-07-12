@@ -4,6 +4,7 @@ from fastapi import HTTPException
 from app.database import get_db
 from app.models.goal import Goal
 from app.schemas.goal import GoalCreate, GoalResponse
+from app.services.goal_service import create_or_update_goal
 
 router = APIRouter(
     prefix="/goal",
@@ -52,3 +53,5 @@ def get_goal(
         )
 
     return goal
+
+    return create_or_update_goal(goal, db)
