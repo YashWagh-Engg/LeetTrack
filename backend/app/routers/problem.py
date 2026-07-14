@@ -5,7 +5,8 @@ from app.database import get_db
 from app.models.problem import Problem
 from app.schemas.problem import ProblemCreate, ProblemResponse
 from datetime import date, timedelta
-from datetime import dates, timedelta
+from datetime import date, timedelta
+from app.models.activity import Activity
 
 router = APIRouter(
     prefix="/problem",
@@ -122,10 +123,10 @@ def get_streak(user_id: int,db: Session = Depends(get_db)):
 
     today = date.today()
 
-    if not dates:
+    if not unique_dates:
        return {"current_streak": 0}
 
-    if dates[0] != today:
+    if unique_dates[0] != today:
        return {"current_streak": 0}
     
     if unique_dates:
@@ -137,6 +138,32 @@ def get_streak(user_id: int,db: Session = Depends(get_db)):
                 break
 
     return {"current_streak": current_streak}
+
+@router.post("/")
+def add_problem(problem: ProblemCreate, db: Session = Depends(get_db)):
+
+    new_problem = Problem(
+        user_id=problem.user_id,
+        title=problem.title,
+        difficulty=problem.difficulty,
+        topic=problem.topic,
+        time_taken=problem.time_taken
+    )
+
+    db.add(new_problem)
+    db.commit()
+    db.refresh(new_problem)
+
+    
+    activity = Activity(
+        user_id=problem.user_id,
+        message=f"Solved '{problem.title}'"
+    )
+
+    db.add(activity)
+    db.commit()
+
+    return new_problem
 
 
 

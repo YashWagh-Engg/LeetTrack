@@ -4,7 +4,6 @@ from fastapi import HTTPException
 from app.database import get_db
 from app.models.goal import Goal
 from app.schemas.goal import GoalCreate, GoalResponse
-from app.dependencies import get_current_user
 from app.models.user import User
 
 router = APIRouter(
@@ -15,12 +14,11 @@ router = APIRouter(
 @router.post("/", response_model=GoalResponse)
 def create_goal(
     goal: GoalCreate,
-    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     existing_goal = db.query(Goal).filter(
-        Goal.user_id == current_user.id
-    ).first()
+    Goal.user_id == goal.user_id
+).first()
 
     if existing_goal:
         existing_goal.daily_goal = goal.daily_goal
@@ -29,9 +27,9 @@ def create_goal(
         return existing_goal
 
     new_goal = Goal(
-        user_id=current_user.id,
-        daily_goal=goal.daily_goal
-    )
+    user_id=goal.user_id,
+    daily_goal=goal.daily_goal
+)
 
     db.add(new_goal)
     db.commit()
