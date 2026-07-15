@@ -1,6 +1,9 @@
 from app.database import engine
 from app.models.base import Base
 from app.models.user import User
+from app.models.notification import Notification
+from app.routers.notification import router as notification_router
+
 
 from fastapi import FastAPI
 
@@ -19,6 +22,7 @@ app.include_router(goal_router)
 app.include_router(problem_router)
 app.include_router(dashboard_router)
 app.include_router(activity_router)
+app.include_router(notification_router)
 
 @app.get("/")
 def home():
