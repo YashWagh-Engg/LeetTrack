@@ -4,7 +4,6 @@ from app.models.user import User
 from app.models.notification import Notification
 from app.routers.notification import router as notification_router
 
-
 from fastapi import FastAPI
 
 Base.metadata.create_all(bind=engine)
