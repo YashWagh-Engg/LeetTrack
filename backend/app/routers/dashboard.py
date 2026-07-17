@@ -9,6 +9,7 @@ from app.models.goal import Goal
 from app.models.problem import Problem
 from app.models.activity import Activity
 from app.models.notification import Notification
+from app.dependencies import get_current_user
 
 router = APIRouter(
     prefix="/dashboard",
@@ -16,11 +17,13 @@ router = APIRouter(
 )
 
 
-@router.get("/{user_id}")
+@router.get("/")
 def get_dashboard(
-    user_id: int,
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    user_id = current_user.id
+    
     user = db.query(User).filter(
         User.id == user_id
     ).first()
