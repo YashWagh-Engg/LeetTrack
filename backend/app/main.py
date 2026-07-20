@@ -3,7 +3,7 @@ from app.models.base import Base
 from app.models.user import User
 from app.models.notification import Notification
 from app.routers.notification import router as notification_router
-
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 
 Base.metadata.create_all(bind=engine)
@@ -15,6 +15,16 @@ from app.routers.problem import router as problem_router
 from app.routers.activity import router as activity_router
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(auth_router)
 app.include_router(goal_router)
