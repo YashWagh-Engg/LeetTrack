@@ -117,12 +117,12 @@ def get_dashboard(
         "current_streak": current_streak,
 
         "recent_activity": [
-            {
-                "activity": activity.activity,
-                "created_at": activity.created_at
-            }
-            for activity in activities
-        ],
+    {
+        "activity": activity.message,
+        "created_at": activity.created_at
+    }
+    for activity in activities
+],
 
         "notifications": [
             {
