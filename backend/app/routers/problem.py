@@ -55,19 +55,15 @@ def add_problem(
 
 @router.get("/", response_model=list[ProblemResponse])
 def get_all_problems(
-    current_user: User = Depends(get_current_user),
+    current_user: User =Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
 
-    problems = db.query(Problem).filter(
-        Problem.user_id == current_user.id
-    ).all()
-
-    if not problems:
-        raise HTTPException(
-            status_code=404,
-            detail="No problems found"
-        )
+    problems = (
+        db.query(Problem)
+        .filter(Problem.user_id == current_user.id)
+        .all()
+    )
 
     return problems
 
