@@ -5,12 +5,18 @@ import api from "../services/api";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import ProblemModal from "../components/ProblemModal";
+import DeleteModal from "../components/DeleteModal";
 
 function Problems() {
 
     const [problems, setProblems] = useState([]);
     const [loading, setLoading] = useState(true);
+
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedProblem, setSelectedProblem] = useState(null);
+
+    const [deleteProblem, setDeleteProblem] = useState(null);
+    const [deleteLoading, setDeleteLoading] = useState(false);
 
     useEffect(() => {
         fetchProblems();
@@ -37,6 +43,39 @@ function Problems() {
         } finally {
 
             setLoading(false);
+
+        }
+
+    };
+
+    const handleEdit = (problem) => {
+
+        setSelectedProblem(problem);
+        setIsModalOpen(true);
+
+    };
+
+    const handleDelete = async () => {
+
+        if (!deleteProblem) return;
+
+        try {
+
+            setDeleteLoading(true);
+
+            await api.delete(`/problem/${deleteProblem.id}`);
+
+            setDeleteProblem(null);
+
+            fetchProblems();
+
+        } catch (error) {
+
+            console.log(error);
+
+        } finally {
+
+            setDeleteLoading(false);
 
         }
 
@@ -81,7 +120,12 @@ function Problems() {
                         </h1>
 
                         <button
-                            onClick={() => setIsModalOpen(true)}
+                            onClick={() => {
+
+                                setSelectedProblem(null);
+                                setIsModalOpen(true);
+
+                            }}
                             className="bg-cyan-500 hover:bg-cyan-600 px-5 py-3 rounded-lg font-semibold"
                         >
                             + Add Problem
@@ -108,7 +152,12 @@ function Problems() {
                             </p>
 
                             <button
-                                onClick={() => setIsModalOpen(true)}
+                                onClick={() => {
+
+                                    setSelectedProblem(null);
+                                    setIsModalOpen(true);
+
+                                }}
                                 className="bg-cyan-500 hover:bg-cyan-600 px-6 py-3 rounded-lg font-semibold"
                             >
                                 Add First Problem
@@ -146,6 +195,10 @@ function Problems() {
                                             Solved On
                                         </th>
 
+                                        <th className="text-left p-4">
+                                            Actions
+                                        </th>
+
                                     </tr>
 
                                 </thead>
@@ -156,10 +209,10 @@ function Problems() {
 
                                         <tr
                                             key={problem.id}
-                                            className="border-b border-slate-700 hover:bg-slate-700 transition"
+                                            className="border-b border-slate-700 hover:bg-slate-700"
                                         >
 
-                                            <td className="p-4 font-medium">
+                                            <td className="p-4">
                                                 {problem.title}
                                             </td>
 
@@ -187,6 +240,28 @@ function Problems() {
                                                     : "-"}
                                             </td>
 
+                                            <td className="p-4">
+
+                                                <div className="flex gap-2">
+
+                                                    <button
+                                                        onClick={() => handleEdit(problem)}
+                                                        className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded"
+                                                    >
+                                                        Edit
+                                                    </button>
+
+                                                    <button
+                                                        onClick={() => setDeleteProblem(problem)}
+                                                        className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded"
+                                                    >
+                                                        Delete
+                                                    </button>
+
+                                                </div>
+
+                                            </td>
+
                                         </tr>
 
                                     ))}
@@ -203,10 +278,21 @@ function Problems() {
 
             </div>
 
-            <ProblemModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onSuccess={fetchProblems}
+<ProblemModal
+isOpen={isModalOpen}
+editProblem={selectedProblem}
+onClose={() => {
+
+setSelectedProblem(null);
+setIsModalOpen(false);}}
+onSuccess={fetchProblems}/>
+
+            <DeleteModal
+                isOpen={deleteProblem !== null}
+                problem={deleteProblem}
+                loading={deleteLoading}
+                onClose={() => setDeleteProblem(null)}
+                onConfirm={handleDelete}
             />
 
         </div>

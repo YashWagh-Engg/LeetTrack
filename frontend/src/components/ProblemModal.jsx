@@ -1,129 +1,155 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../services/api";
 
-function ProblemModal({ isOpen, onClose, onSuccess }) {
+function ProblemModal({
+    isOpen,
+    onClose,
+    onSuccess,
+    editProblem = null
+}) {
+
     const [formData, setFormData] = useState({
         title: "",
         difficulty: "Easy",
         topic: "",
-        time_taken: "",
+        time_taken: ""
     });
 
     const [loading, setLoading] = useState(false);
 
-    if (!isOpen) return null;
+    useEffect(() => {
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
+        if (editProblem) {
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+            setFormData({
+                title: editProblem.title,
+                difficulty: editProblem.difficulty,
+                topic: editProblem.topic,
+                time_taken: editProblem.time_taken
+            });
 
-        setLoading(true);
-
-        try {
-            await api.post("/problem/", formData);
+        } else {
 
             setFormData({
                 title: "",
                 difficulty: "Easy",
                 topic: "",
-                time_taken: "",
+                time_taken: ""
             });
+
+        }
+
+    }, [editProblem]);
+
+    if (!isOpen) return null;
+
+    const handleChange = (e) => {
+
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+
+    };
+
+    const handleSubmit = async (e) => {
+
+        e.preventDefault();
+
+        setLoading(true);
+
+        try {
+
+            if (editProblem) {
+
+                await api.put(
+                    `/problem/${editProblem.id}`,
+                    formData
+                );
+
+            } else {
+
+                await api.post(
+                    "/problem/",
+                    formData
+                );
+
+            }
 
             onSuccess();
             onClose();
-        } catch (error) {
-            console.log(error);
-            alert("Failed to add problem.");
+
+        } catch (err) {
+
+            console.log(err);
+
         } finally {
+
             setLoading(false);
+
         }
+
     };
 
     return (
-        <div className="fixed inset-0 bg-black/70 flex justify-center items-center z-50">
 
-            <div className="bg-slate-800 w-full max-w-lg rounded-xl p-8 shadow-2xl">
+        <div className="fixed inset-0 bg-black/70 flex justify-center items-center">
 
-                <h2 className="text-3xl font-bold text-white mb-6">
-                    Add Problem
+            <div className="bg-slate-800 p-8 rounded-xl w-[500px]">
+
+                <h2 className="text-2xl font-bold mb-6">
+
+                    {editProblem ? "Edit Problem" : "Add Problem"}
+
                 </h2>
 
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form
+                    onSubmit={handleSubmit}
+                    className="space-y-4"
+                >
 
-                    <div>
-                        <label className="block mb-2 text-gray-300">
-                            Problem Title
-                        </label>
+                    <input
+                        className="w-full bg-slate-700 p-3 rounded"
+                        placeholder="Problem Title"
+                        name="title"
+                        value={formData.title}
+                        onChange={handleChange}
+                    />
 
-                        <input
-                            type="text"
-                            name="title"
-                            value={formData.title}
-                            onChange={handleChange}
-                            required
-                            className="w-full bg-slate-700 p-3 rounded-lg outline-none"
-                        />
-                    </div>
+                    <select
+                        className="w-full bg-slate-700 p-3 rounded"
+                        name="difficulty"
+                        value={formData.difficulty}
+                        onChange={handleChange}
+                    >
+                        <option>Easy</option>
+                        <option>Medium</option>
+                        <option>Hard</option>
+                    </select>
 
-                    <div>
-                        <label className="block mb-2 text-gray-300">
-                            Difficulty
-                        </label>
+                    <input
+                        className="w-full bg-slate-700 p-3 rounded"
+                        placeholder="Topic"
+                        name="topic"
+                        value={formData.topic}
+                        onChange={handleChange}
+                    />
 
-                        <select
-                            name="difficulty"
-                            value={formData.difficulty}
-                            onChange={handleChange}
-                            className="w-full bg-slate-700 p-3 rounded-lg"
-                        >
-                            <option>Easy</option>
-                            <option>Medium</option>
-                            <option>Hard</option>
-                        </select>
-                    </div>
+                    <input
+                        className="w-full bg-slate-700 p-3 rounded"
+                        placeholder="Time Taken"
+                        type="number"
+                        name="time_taken"
+                        value={formData.time_taken}
+                        onChange={handleChange}
+                    />
 
-                    <div>
-                        <label className="block mb-2 text-gray-300">
-                            Topic
-                        </label>
-
-                        <input
-                            type="text"
-                            name="topic"
-                            value={formData.topic}
-                            onChange={handleChange}
-                            required
-                            className="w-full bg-slate-700 p-3 rounded-lg outline-none"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block mb-2 text-gray-300">
-                            Time Taken (minutes)
-                        </label>
-
-                        <input
-                            type="number"
-                            name="time_taken"
-                            value={formData.time_taken}
-                            onChange={handleChange}
-                            required
-                            className="w-full bg-slate-700 p-3 rounded-lg outline-none"
-                        />
-                    </div>
-
-                    <div className="flex justify-end gap-4 pt-4">
+                    <div className="flex justify-end gap-3">
 
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-5 py-2 bg-gray-600 rounded-lg hover:bg-gray-500"
+                            className="bg-gray-600 px-4 py-2 rounded"
                         >
                             Cancel
                         </button>
@@ -131,9 +157,13 @@ function ProblemModal({ isOpen, onClose, onSuccess }) {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="px-5 py-2 bg-cyan-500 rounded-lg hover:bg-cyan-600"
+                            className="bg-cyan-500 px-4 py-2 rounded"
                         >
-                            {loading ? "Saving..." : "Save"}
+                            {loading
+                                ? "Saving..."
+                                : editProblem
+                                ? "Update"
+                                : "Save"}
                         </button>
 
                     </div>
@@ -143,7 +173,9 @@ function ProblemModal({ isOpen, onClose, onSuccess }) {
             </div>
 
         </div>
+
     );
+
 }
 
 export default ProblemModal;

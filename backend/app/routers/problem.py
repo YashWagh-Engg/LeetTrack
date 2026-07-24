@@ -143,6 +143,38 @@ def get_stats(
         "hard": hard,
         "averageTime": round(average_time, 2)
     }
+@router.put("/{problem_id}", response_model=ProblemResponse)
+def update_problem(
+    problem_id: int,
+    problem: ProblemCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+
+    existing_problem = (
+        db.query(Problem)
+        .filter(
+            Problem.id == problem_id,
+            Problem.user_id == current_user.id
+        )
+        .first()
+    )
+
+    if existing_problem is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Problem not found"
+        )
+
+    existing_problem.title = problem.title
+    existing_problem.difficulty = problem.difficulty
+    existing_problem.topic = problem.topic
+    existing_problem.time_taken = problem.time_taken
+
+    db.commit()
+    db.refresh(existing_problem)
+
+    return existing_problem
 
 
 
