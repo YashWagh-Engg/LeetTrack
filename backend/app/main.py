@@ -13,6 +13,7 @@ from app.routers.goal import router as goal_router
 from app.routers.dashboard import router as dashboard_router
 from app.routers.problem import router as problem_router
 from app.routers.activity import router as activity_router
+from app.routers.analytics import router as analytics_router
 
 app = FastAPI()
 
@@ -32,6 +33,7 @@ app.include_router(problem_router)
 app.include_router(dashboard_router)
 app.include_router(activity_router)
 app.include_router(notification_router)
+app.include_router(analytics_router)
 
 @app.get("/")
 def home():

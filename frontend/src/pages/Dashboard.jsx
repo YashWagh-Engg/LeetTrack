@@ -68,58 +68,65 @@ function Dashboard() {
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
 
                         <StatCard
-                            title="Daily Goal"
-                            value={dashboard.daily_goal}
-                            icon="🎯"
-                        />
+    title="Easy"
+    value={dashboard.easy}
+    icon="🟢"
+    color="green"
+/>
 
-                        <StatCard
-                            title="Solved Today"
-                            value={dashboard.solved_today}
-                            icon="✅"
-                        />
+<StatCard
+    title="Medium"
+    value={dashboard.medium}
+    icon="🟡"
+    color="yellow"
+/>
 
-                        <StatCard
-                            title="Remaining Goal"
-                            value={dashboard.remaining_goal}
-                            icon="🔥"
-                        />
+<StatCard
+    title="Hard"
+    value={dashboard.hard}
+    icon="🔴"
+    color="red"
+/>
 
-                        <StatCard
-                            title="Total Problems"
-                            value={dashboard.total_problems}
-                            icon="📚"
-                        />
+<StatCard
+    title="Current Streak"
+    value={`${dashboard.current_streak} Days`}
+    icon="🔥"
+    color="orange"
+/>
 
-                    </div>
+<StatCard
+    title="Daily Goal"
+    value={dashboard.daily_goal}
+    icon="🎯"
+    color="purple"
+/>
 
-                    {/* Second Row */}
+<StatCard
+    title="Solved Today"
+    value={dashboard.solved_today}
+    icon="✅"
+    color="green"
+/>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-6">
+<StatCard
+    title="Remaining Goal"
+    value={dashboard.remaining_goal}
+    icon="📌"
+    color="cyan"
+/>
 
-                        <StatCard
-                            title="Easy"
-                            value={dashboard.easy}
-                            icon="🟢"
-                        />
-
-                        <StatCard
-                            title="Medium"
-                            value={dashboard.medium}
-                            icon="🟡"
-                        />
-
-                        <StatCard
-                            title="Hard"
-                            value={dashboard.hard}
-                            icon="🔴"
-                        />
-
-                        <StatCard
-                            title="Current Streak"
-                            value={dashboard.current_streak}
-                            icon="⚡"
-                        />
+<StatCard
+    title="Total Problems"
+    value={dashboard.total_problems}
+    icon="📚"
+    color="purple"
+/>
+<StatCard
+    title="Current Streak"
+    value={`${dashboard.current_streak} Days`}
+    icon="🔥"
+/>
 
                     </div>
 

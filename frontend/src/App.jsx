@@ -5,13 +5,13 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import Problems from "./pages/Problems";
 import Goals from "./pages/Goals";
+import Analytics from "./pages/Analytics";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
     return (
         <BrowserRouter>
-
             <Routes>
 
                 <Route
@@ -43,6 +43,15 @@ function App() {
                 />
 
                 <Route
+                    path="/analytics"
+                    element={
+                        <ProtectedRoute>
+                            <Analytics />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
                     path="/goals"
                     element={
                         <ProtectedRoute>
@@ -52,7 +61,6 @@ function App() {
                 />
 
             </Routes>
-
         </BrowserRouter>
     );
 }

@@ -65,3 +65,54 @@ def get_goal(
         )
 
     return goal
+
+@router.put("/", response_model=GoalResponse)
+def update_goal(
+    goal: GoalCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+
+    existing_goal = (
+        db.query(Goal)
+        .filter(Goal.user_id == current_user.id)
+        .first()
+    )
+
+    if existing_goal is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Goal not found"
+        )
+
+    existing_goal.daily_goal = goal.daily_goal
+
+    db.commit()
+    db.refresh(existing_goal)
+
+    return existing_goal
+
+@router.delete("/")
+def delete_goal(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+
+    goal = (
+        db.query(Goal)
+        .filter(Goal.user_id == current_user.id)
+        .first()
+    )
+
+    if goal is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Goal not found"
+        )
+
+    db.delete(goal)
+    db.commit()
+
+    return {
+        "message": "Goal deleted successfully"
+    }

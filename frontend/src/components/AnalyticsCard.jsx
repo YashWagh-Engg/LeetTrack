@@ -1,24 +1,27 @@
-import React from "react";
-
-
-function StatCard({ title, value, icon }) {
+function AnalyticsCard({
+    title,
+    value,
+    icon
+}) {
 
     return (
+
         <div
             className="
                 bg-slate-800
-                rounded-xl
+                rounded-2xl
                 p-6
+                border
+                border-slate-700
                 shadow-lg
                 hover:shadow-cyan-500/20
                 hover:-translate-y-1
-                duration-300
                 transition-all
-                border
-                border-slate-700
+                duration-300
             "
         >
-            <div className="flex items-center justify-between">
+
+            <div className="flex justify-between items-center">
 
                 <div>
 
@@ -26,19 +29,22 @@ function StatCard({ title, value, icon }) {
                         {title}
                     </p>
 
-                    <h2 className="text-3xl font-bold text-white mt-2">
+                    <h2 className="text-4xl font-bold text-white mt-3">
                         {value}
                     </h2>
 
                 </div>
 
-                <div className="text-4xl">
+                <div className="text-5xl">
                     {icon}
                 </div>
 
             </div>
+
         </div>
+
     );
+
 }
 
-export default StatCard;
+export default AnalyticsCard;

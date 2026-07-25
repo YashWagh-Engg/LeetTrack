@@ -26,6 +26,11 @@ function Sidebar() {
                 <NavLink to="/goals" className={linkClass}>
                     🎯 Goals
                 </NavLink>
+                <NavLink
+                    to="/analytics"
+                    className={linkClass}>
+                    📊 Analytics
+</NavLink>
             </nav>
         </aside>
     );
