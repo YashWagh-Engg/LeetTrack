@@ -28,7 +28,7 @@ function Analytics() {
 
             } catch (error) {
 
-                console.log(error);
+                console.error("Failed to load analytics:", error);
 
             } finally {
 
@@ -48,11 +48,21 @@ function Analytics() {
 
             <div className="min-h-screen bg-slate-900 flex items-center justify-center">
 
-                <h1 className="text-white text-3xl font-bold">
-                    Loading Analytics...
-                </h1>
+    <div className="text-center">
 
-            </div>
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-cyan-500 border-t-transparent mx-auto mb-6"></div>
+
+        <h2 className="text-2xl font-semibold text-white">
+            Loading Analytics...
+        </h2>
+
+        <p className="text-gray-400 mt-2">
+            Preparing your coding insights.
+        </p>
+
+    </div>
+
+</div>
 
         );
 
@@ -70,14 +80,32 @@ function Analytics() {
 
                 <main className="flex-1 p-8">
 
-                    <h1 className="text-4xl font-bold mb-8">
-                        📊 Analytics
-                    </h1>
+                    <div className="flex justify-between items-center mb-8">
+
+    <div>
+
+        <h1 className="text-4xl font-bold">
+            📊 Analytics
+        </h1>
+
+        <p className="text-gray-400 mt-2">
+            Track your progress, consistency, and performance.
+        </p>
+
+    </div>
+
+    <button
+        onClick={() => window.location.reload()}
+        className="bg-cyan-500 hover:bg-cyan-600 px-5 py-3 rounded-xl font-semibold transition"
+    >
+        🔄 Refresh
+    </button>
+
+</div>
 
                     {/* Cards */}
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-
                         <AnalyticsCard
                             title="Total Problems"
                             value={analytics.total_problems}

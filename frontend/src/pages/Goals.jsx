@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { useEffect, useState, useCallback } from "react";
 
 import api from "../services/api";
@@ -32,13 +33,21 @@ function Goals() {
     }, [fetchGoal]);
 
     const handleDelete = async () => {
-        try {
-            await api.delete("/goal/");
-            setGoal(null);
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    const confirmDelete = window.confirm(
+        "Are you sure you want to delete your daily goal?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+        await api.delete("/goal/");
+        setGoal(null);
+        toast.success("Goal deleted successfully 🗑️");
+    } catch (error) {
+        console.log(error);
+        toast.error("Failed to delete goal.");
+    }
+};
 
     return (
         <div className="bg-slate-900 min-h-screen text-white">

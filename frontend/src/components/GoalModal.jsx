@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import api from "../services/api";
 
@@ -24,41 +25,35 @@ function GoalModal({
     if (!isOpen) return null;
 
     const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        e.preventDefault();
+    try {
+        setLoading(true);
 
-        try {
+        if (currentGoal) {
+            await api.put("/goal/", {
+                daily_goal: Number(dailyGoal),
+            });
 
-            setLoading(true);
+            toast.success("Goal updated successfully 🎯");
+        } else {
+            await api.post("/goal/", {
+                daily_goal: Number(dailyGoal),
+            });
 
-            if (currentGoal) {
-
-                await api.put("/goal/", {
-                    daily_goal: Number(dailyGoal)
-                });
-
-            } else {
-
-                await api.post("/goal/", {
-                    daily_goal: Number(dailyGoal)
-                });
-
-            }
-
-            onSuccess();
-            onClose();
-
-        } catch (err) {
-
-            console.log(err);
-
-        } finally {
-
-            setLoading(false);
-
+            toast.success("Goal created successfully 🎉");
         }
 
-    };
+        onSuccess();
+        onClose();
+
+    } catch (err) {
+        console.log(err);
+        toast.error("Something went wrong!");
+    } finally {
+        setLoading(false);
+    }
+};
 
     return (
 

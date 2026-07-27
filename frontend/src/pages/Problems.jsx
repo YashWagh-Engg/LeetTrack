@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 
 import api from "../services/api";
@@ -58,6 +59,9 @@ function Problems() {
     const handleDelete = async () => {
 
         if (!deleteProblem) return;
+        await api.delete(`/problem/${deleteProblem.id}`);
+
+        toast.success("Problem deleted successfully ✅");
 
         try {
 
@@ -72,6 +76,7 @@ function Problems() {
         } catch (error) {
 
             console.log(error);
+            toast.error("Failed to delete problem");
 
         } finally {
 
@@ -115,9 +120,15 @@ function Problems() {
 
                     <div className="flex justify-between items-center mb-8">
 
+                        <div>
                         <h1 className="text-4xl font-bold">
-                            Problems
+                          Problems 📚
                         </h1>
+
+                        <p className="text-gray-400 mt-2">
+                         Manage every LeetCode problem you've solved.
+                        </p>
+                        </div>
 
                         <button
                             onClick={() => {
@@ -135,20 +146,20 @@ function Problems() {
 
                     {loading ? (
 
-                        <div className="text-center text-xl mt-20">
-                            Loading Problems...
+                        <div className="flex justify-center items-center h-[60vh]">
+                        <div className="animate-spin rounded-full h-14 w-14 border-4 border-cyan-500 border-t-transparent"></div>
                         </div>
 
                     ) : problems.length === 0 ? (
 
                         <div className="bg-slate-800 rounded-xl p-10 text-center">
 
-                            <h2 className="text-2xl font-bold">
-                                No Problems Yet 📚
+                            <h2 className="text-3xl font-bold">
+                            🚀 Start Your Coding Journey
                             </h2>
 
                             <p className="text-gray-400 mt-3 mb-6">
-                                Start solving LeetCode problems!
+                                Solve your first problem and build your streak.
                             </p>
 
                             <button
@@ -167,7 +178,7 @@ function Problems() {
 
                     ) : (
 
-                        <div className="overflow-x-auto rounded-xl">
+                        <div className="overflow-x-auto rounded-xl border border-slate-700 shadow-lg transition-all duration-300 hover:shadow-cyan-500/10">
 
                             <table className="w-full bg-slate-800">
 
