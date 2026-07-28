@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -40,10 +41,10 @@ function Login() {
         } catch (err) {
     console.log(err.response);
 
-    alert(
-        err.response?.data?.detail ||
-        "Something went wrong"
-    );
+    toast.error(
+    err.response?.data?.detail ||
+    "Something went wrong"
+);
 }
 
     };
