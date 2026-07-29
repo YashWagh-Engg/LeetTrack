@@ -20,9 +20,11 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-    "http://localhost:5173",
-    "https://leet-track-smoky.vercel.app"],
-    
+        "http://localhost:5173",
+        "https://leet-track-smoky.vercel.app",
+        "https://leet-track-git-main-leet-track.vercel.app",
+        "https://leet-track-5fnefqzx3-leet-track.vercel.app",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
