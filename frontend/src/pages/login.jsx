@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
-import api from "../services/api";
+import api from "../Services/api";
 import { useAuth } from "../context/AuthContext";
 
 function Login() {
