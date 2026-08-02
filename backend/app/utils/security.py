@@ -6,11 +6,15 @@ import os
 
 load_dotenv()
 
+
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(
     os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30)
 )
+
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY is not set!")
 
 pwd_context = CryptContext(
     schemes=["bcrypt"],
@@ -37,10 +41,7 @@ def create_access_token(data: dict):
 
     expire = datetime.now(timezone.utc) + timedelta(
         minutes=ACCESS_TOKEN_EXPIRE_MINUTES
-
     )
-
-    return jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
 
     to_encode.update({"exp": expire})
 
