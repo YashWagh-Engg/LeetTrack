@@ -1,35 +1,15 @@
-import { createContext, useContext, useState } from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
-const AuthContext = createContext();
+function ProtectedRoute({ children }) {
 
-export function AuthProvider({ children }) {
-    const [token, setToken] = useState(
-        localStorage.getItem("token")
-    );
+    const { token } = useAuth();
 
-    const login = (jwt) => {
-        localStorage.setItem("token", jwt);
-        setToken(jwt);
-    };
+    if (!token) {
+        return <Navigate to="/" replace />;
+    }
 
-    const logout = () => {
-        localStorage.removeItem("token");
-        setToken(null);
-    };
-
-    return (
-        <AuthContext.Provider
-            value={{
-                token,
-                login,
-                logout
-            }}
-        >
-            {children}
-        </AuthContext.Provider>
-    );
+    return children;
 }
 
-export function useAuth() {
-    return useContext(AuthContext);
-}
+export default ProtectedRoute;

@@ -16,6 +16,8 @@ function Login() {
         password: ""
     });
 
+    const [loading, setLoading] = useState(false);
+
     const handleChange = (e) => {
         setForm({
             ...form,
@@ -24,30 +26,32 @@ function Login() {
     };
 
     const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        e.preventDefault();
+    setLoading(true);
 
-        try {
+    try {
+        const response = await api.post(
+            "/login",
+            form
+        );
 
-            const response = await api.post(
-                "/login",
-                form
-            );
+        login(response.data.access_token);
 
-            login(response.data.access_token);
+        navigate("/dashboard");
 
-            navigate("/dashboard");
+    } catch (err) {
+        console.log(err.response);
 
-        } catch (err) {
-    console.log(err.response);
+        toast.error(
+            err.response?.data?.detail ||
+            "Something went wrong"
+        );
 
-    toast.error(
-    err.response?.data?.detail ||
-    "Something went wrong"
-);
-}
-
-    };
+    } finally {
+        setLoading(false);
+    }
+};
 
     return (
 
@@ -97,14 +101,14 @@ function Login() {
                 />
 
                 <button
-
-                    className="w-full bg-cyan-500 hover:bg-cyan-600 rounded p-3 font-bold"
-
-                >
-
-                    Login
-
+                 type="submit"
+                 disabled={loading}
+                 className="w-full bg-cyan-500 hover:bg-cyan-600 disabled:opacity-50 rounded p-3 font-bold"
+>
+                 {loading ? "Logging in..." : "Login"}
                 </button>
+
+                  
 
                 <p className="text-center text-gray-400 mt-6">
 
